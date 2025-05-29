@@ -1,0 +1,2631 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bayanihan Market - Full Feature Demo</title>
+  <meta name="description" content="Bayanihan Market - Local Filipino Online Marketplace with Seller onboarding, product management, real-time messaging and integrated POS." />
+  <meta property="og:title" content="Bayanihan Market - Support Local Filipino Sellers" />
+  <meta property="og:description" content="Shop fresh, handmade, and local products from barangays nationwide." />
+  <meta property="og:image" content="https://bayanihanmarket.ph/img/preview.jpg" />
+  <style>
+    /* Base Reset & Styling */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      color: #333;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a, button {
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: #006d77;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    button {
+      background-color: #006d77;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #028090;
+    }
+    button:disabled {
+      background-color: #b0b8b9;
+      cursor: not-allowed;
+    }
+    input, select, textarea {
+      font-family: inherit;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      margin-top: 0.25rem;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #006d77;
+      box-shadow: 0 0 5px rgba(0,109,119,0.5);
+    }
+    h1,h2,h3,h4,h5,h6 {
+      margin: 0;
+      font-weight: 700;
+      color: #014f56;
+      user-select: none;
+    }
+    p {
+      margin: 0.5rem 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      flex: 1 0 auto;
+      width: 100%;
+    }
+
+    /* Header */
+    header {
+      background-color: #014f56;
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 2000;
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: #83c5be;
+      user-select: none;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    nav a {
+      padding: 0.3rem 0.6rem;
+      font-weight: 600;
+      color: white;
+      border-radius: 6px;
+      background-color: transparent;
+    }
+    nav a.active,
+    nav a:hover {
+      background-color: #83c5be;
+      color: #014f56;
+    }
+    nav button {
+      border-radius: 6px;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #014f56;
+      color: #acc9cd;
+      padding: 1rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    footer a {
+      color: #83c5be;
+      margin: 0 0.5rem;
+    }
+    footer a:hover {
+      color: #b3f0e4;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: linear-gradient(90deg, rgba(3,54,73,0.85), rgba(6,100,115,0.85)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+      color: white;
+      padding: 6rem 1rem 7rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 420px;
+      user-select:none;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+    }
+    .hero p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      margin-bottom: 2rem;
+      font-weight: 600;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+    }
+    .hero button {
+      align-self: center;
+      padding: 1rem 2rem;
+      font-size: 1.3rem;
+      border-radius: 30px;
+      background-color: #83c5be;
+      color: #014f56;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(131,197,190,0.6);
+      border: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select:none;
+      text-shadow:none;
+    }
+    .hero button:hover {
+      background-color: #5ca88b;
+      color: white;
+      box-shadow: 0 6px 18px rgba(92,168,139,0.9);
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 900px;
+      margin: -4rem auto 3rem auto;
+      background: white;
+      padding: 1.2rem 1rem 1.5rem;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+      position: relative;
+      z-index: 20;
+    }
+    .search-bar input[type="text"] {
+      flex: 2 1 300px;
+      border-radius: 8px;
+      border: 1.5px solid #ccc;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #014f56;
+    }
+    .search-bar select {
+      flex: 1 1 190px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #014f56;
+    }
+    .search-bar button {
+      flex: 0 0 140px;
+      font-weight: bolder;
+      border-radius: 10px;
+      background-color: #006d77;
+      box-shadow: 0 5px 10px rgba(0,109,119,0.3);
+      color: white;
+      font-size: 1rem;
+      border: none;
+    }
+    .search-bar button:hover {
+      background-color: #028090;
+      box-shadow: 0 7px 14px rgba(2,128,144,0.6);
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 1.8rem;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Generic card component */
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 9px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      cursor: default;
+    }
+    .card:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.14);
+      transform: translateY(-4px);
+    }
+    .card img {
+      width: 100%;
+      object-fit: cover;
+      aspect-ratio: 4 / 3;
+      user-select:none;
+    }
+    .card-content {
+      padding: 1rem 1rem 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
+    .card-content h3 {
+      color: #014f56;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      flex-shrink: 1;
+    }
+    .card-content p {
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+      line-height: 1.25;
+    }
+    .card-content button {
+      align-self: flex-start;
+      padding: 0.55rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      background-color: #83c5be;
+      color: #014f56;
+      border-radius: 30px;
+      box-shadow: 0 2px 7px rgba(131,197,190,0.65);
+      border: none;
+      transition: background-color 0.3s ease;
+      user-select:none;
+    }
+    .card-content button:hover {
+      background-color: #5ca88b;
+      color: white;
+      box-shadow: 0 4px 10px rgba(92,168,139,0.9);
+    }
+
+    /* Tags and badges */
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 100px;
+      text-transform: uppercase;
+      color: white;
+      user-select:none;
+    }
+    .badge-featured {
+      background-color: #007a99;
+    }
+    .badge-preorder {
+      background-color: #dd6b20;
+    }
+    .badge-soldout {
+      background-color: #9b2c2c;
+    }
+    .badge-bundle {
+      background-color: #234e52;
+    }
+
+    /* Dashboard styles */
+    .dashboard {
+      display: flex;
+      min-height: 80vh;
+      background: #e8f1f2;
+      margin: 2rem 1rem;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      user-select:none;
+    }
+    .sidebar {
+      background: #014f56;
+      color: white;
+      width: 240px;
+      min-width: 240px;
+      display: flex;
+      flex-direction: column;
+      padding-top: 1rem;
+    }
+    .sidebar a,
+    .sidebar button {
+      padding: 1rem 2rem;
+      border: none;
+      background: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      display: block;
+      width: 100%;
+      border-left: 6px solid transparent;
+      text-align: left;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar a.active,
+    .sidebar button.active {
+      background-color: #83c5be;
+      color: #014f56;
+      border-left: 6px solid #006d77;
+      font-weight: 700;
+    }
+    .sidebar a:hover,
+    .sidebar button:hover {
+      background-color: #006d77;
+      color: #b3f0e4;
+    }
+    .dashboard-content {
+      flex: 1 1 auto;
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      background: white;
+      border-radius: 0 0 14px 14px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #f3f6f7;
+      color: #014f56;
+      font-weight: 700;
+      user-select:none;
+    }
+    tr:hover {
+      background-color: #f7fafc;
+    }
+
+    /* Forms */
+    form {
+      background: white;
+      padding: 1.2rem 2rem;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 640px;
+      margin: 0 auto 3rem auto;
+      box-sizing: border-box;
+    }
+    form > h2 {
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    form label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 700;
+      color: #014f56;
+      user-select:none;
+    }
+    form input, form select, form textarea {
+      margin-top: 0.3rem;
+      box-sizing: border-box;
+    }
+    form button[type="submit"] {
+      cursor: pointer;
+      margin-top: 2rem;
+      width: 100%;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 14px;
+    }
+
+    /* Utility */
+    .flex-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .flex-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .mb1 {
+      margin-bottom: 1rem;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-muted {
+      color: #777;
+    }
+    .danger-btn {
+      background-color: #ba2525;
+    }
+    .danger-btn:hover {
+      background-color: #7e1616;
+    }
+    .input-small {
+      width: 60px;
+    }
+
+    /* Responsive */
+    @media(max-width: 900px) {
+      .nav-container {
+        justify-content: center;
+      }
+      nav {
+        gap: 0.7rem;
+      }
+      .dashboard {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        min-width: auto;
+        display: flex;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+      }
+      .sidebar a, .sidebar button {
+        flex: 1 0 auto;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        border-left: none;
+        font-size: 0.9rem;
+        border-bottom: none;
+      }
+      .sidebar a.active, .sidebar button.active {
+        border-left: none;
+        border-bottom: 3px solid #006d77;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      }
+      form {
+        margin: 1rem;
+        padding: 1rem 1.5rem;
+      }
+      .search-bar {
+        margin: -5rem 0 3rem;
+      }
+    }
+    @media(max-width: 600px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .search-bar {
+        flex-direction: column;
+        margin: -6rem 1rem 2rem;
+      }
+      .search-bar input, .search-bar select, .search-bar button {
+        flex: none !important;
+        width: 100% !important;
+      }
+    }
+
+    /* Floating Action Button (FAB) for message seller */
+    .fab-message {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #83c5be;
+      color: #014f56;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(131,197,190,0.6);
+      border: none;
+      cursor: pointer;
+      z-index: 10000;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .fab-message:hover {
+      background-color: #5ca88b;
+      color: white;
+      box-shadow: 0 6px 16px rgba(92,168,139,0.8);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 12000;
+      user-select:none;
+    }
+    .modal {
+      background-color: white;
+      width: 96%;
+      max-width: 420px;
+      border-radius: 14px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+      padding: 1rem 1.5rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      user-select:none;
+    }
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #014f56;
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select: none;
+    }
+    .modal textarea {
+      resize: none;
+      height: 100px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .modal button.close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      color: #014f56;
+      cursor: pointer;
+      user-select:none;
+    }
+    .message-thread {
+      height: 220px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.5rem;
+      overflow-y: auto;
+      margin-bottom: 0.8rem;
+      background: #f7fafc;
+      font-size: 0.9rem;
+      user-select:none;
+    }
+    .message-thread .message {
+      margin-bottom: 0.6rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: 10px;
+      word-wrap: break-word;
+      max-width: 75%;
+      line-height: 1.3;
+      user-select:none;
+    }
+    .message-thread .message.buyer {
+      background-color: #83c5be;
+      color: #014f56;
+      align-self: flex-start;
+    }
+    .message-thread .message.seller {
+      background-color: #006d77;
+      color: white;
+      align-self: flex-end;
+    }
+  </style>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.production.min.js" crossorigin></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <div id="root" data-root></div>
+  <script>
+    (function() {
+      const { useState, useEffect, createContext, useContext, useRef, Fragment } = React;
+      const { createRoot } = ReactDOM;
+      const {
+        BrowserRouter,
+        Routes,
+        Route,
+        Link,
+        NavLink,
+        useParams,
+        useNavigate,
+        useLocation,
+      } = ReactRouterDOM;
+
+      // Contexts
+      const AuthContext = createContext(null);
+      const CartContext = createContext(null);
+
+      // Sample Data - Extended to include curated products template by category
+      const sellerCategories = [
+        { id: 'farmer', name: 'Farmer' },
+        { id: 'fisherfolk', name: 'Fisherfolk' },
+        { id: 'crafts_vendor', name: 'Crafts Vendor' },
+        { id: 'baker', name: 'Baker' },
+        { id: 'homemade_goods', name: 'Homemade Goods' },
+        { id: 'sari_sari_store', name: 'Sari-Sari Store' },
+        { id: 'others', name: 'Others' },
+      ];
+
+      // Predefined curated templates keyed by seller category
+      const curatedTemplates = {
+        farmer: [
+          { name: 'Fresh Sitaw', description: 'Locally grown sitaw with rich flavor', price: 35, image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Kalabasa', description: 'Sweet and nutritious pumpkin', price: 40, image: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Kamatis', description: 'Fresh handpicked tomatoes', price: 50, image: 'https://images.unsplash.com/photo-1574169208507-843761748e74?auto=format&fit=crop&w=400&q=60' },
+        ],
+        fisherfolk: [
+          { name: 'Fresh Tilapia', description: 'Caught daily, cleaned and ready to cook', price: 120, image: 'https://images.unsplash.com/photo-1571091718767-688d3b8e6819?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Shrimp', description: 'Fresh shrimp perfect for your favorite dishes', price: 190, image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Bangus', description: 'Milkfish from local bays', price: 130, image: 'https://images.unsplash.com/photo-1554843043-5b4dc557d0c3?auto=format&fit=crop&w=400&q=60' },
+        ],
+        crafts_vendor: [
+          { name: 'Handwoven Basket', description: 'Beautiful woven basket perfect for decor', price: 350, image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Capiz Lantern', description: 'Traditional capiz shell lantern', price: 220, image: 'https://images.unsplash.com/photo-1543968992-7144ac55b374?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Native Jewelry Set', description: 'Handmade beads jewelry', price: 180, image: 'https://images.unsplash.com/photo-1465188162913-b2cad5096275?auto=format&fit=crop&w=400&q=60' },
+        ],
+        baker: [
+          { name: 'Pan de Sal', description: 'Classic Filipino bread rolls', price: 25, image: 'https://images.unsplash.com/photo-1574333752793-cd9f69812018?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Ensaymada', description: 'Soft brioche with butter and sugar', price: 40, image: 'https://images.unsplash.com/photo-1589927986089-35812388d1f4?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Monay', description: 'Dense bread roll, perfect with cheese', price: 35, image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=400&q=60' },
+        ],
+        homemade_goods: [
+          { name: 'Biko', description: 'Sticky rice cake with coconut and brown sugar', price: 70, image: 'https://images.unsplash.com/photo-1573830071472-e5af6e3cbce7?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Kalamay', description: 'Sweet sticky rice dessert', price: 60, image: 'https://images.unsplash.com/photo-1564343644867-e12bf81a8857?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Puto', description: 'Steamed rice cakes', price: 15, image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=60' },
+        ],
+        sari_sari_store: [
+          { name: 'Instant Noodles', description: 'Quick meals for busy days', price: 15, image: 'https://images.unsplash.com/photo-1589981856801-2f5e9e9a7783?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Canned Sardines', description: 'Classic Filipino pantry essential', price: 30, image: 'https://images.unsplash.com/photo-1611080628697-c6c9ea4a7ddf?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Condiments Pack', description: 'Soy sauce, vinegar, and more', price: 80, image: 'https://images.unsplash.com/photo-1502324515428-84ca01a74a50?auto=format&fit=crop&w=400&q=60' },
+        ],
+        others: [
+          { name: 'Local Herbal Tea', description: 'Refreshing and healthy herbal blends', price: 95, image: 'https://images.unsplash.com/photo-1522974780141-24e1d07adc96?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Traditional Souvenirs', description: 'Handcrafted mementos', price: 150, image: 'https://images.unsplash.com/photo-1532889811911-9cc3ffc710e3?auto=format&fit=crop&w=400&q=60' },
+          { name: 'Organic Honey', description: 'Pure and natural honey jars', price: 210, image: 'https://images.unsplash.com/photo-1501021726743-48cc8ec1334b?auto=format&fit=crop&w=400&q=60' },
+        ],
+      };
+
+      // Product statuses for advanced seller options
+      const productStatusOptions = [
+        { id: 'featured', label: 'Featured' },
+        { id: 'preorder', label: 'Pre-Order' },
+        { id: 'soldout', label: 'Sold Out' },
+        { id: 'bundle', label: 'Bundle Deal' },
+      ];
+
+      // Mock sellers and products database in memory
+      let sellersDB = [
+        {
+          id: 's_belenfarms',
+          storeName: 'Belen Farms',
+          ownerName: 'Belen Dela Cruz',
+          email: 'belen@farms.com',
+          role: 'seller',
+          storeDescription: 'Fresh & organic vegetables direct from our farm.',
+          logoUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=200&q=60',
+          bannerUrl: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=1400&q=80',
+          category: 'farmer',
+          location: 'Barangay San Isidro, City of Manila',
+          pickupInstructions: 'Available every Saturday 9AM–3PM at Barangay Hall.',
+          deliveryPartners: [{ name: 'J&T Express', feeByArea: { 'City of Manila': 60 } }],
+          products: [
+            {
+              id: 'pb56',
+              name: 'Fresh Sitaw',
+              description: 'Organic sitaw with rich flavor',
+              price: 35,
+              stock: 50,
+              images: ['https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=400&q=80'],
+              category: 'vegetables',
+              status: ['featured'],
+              isBundle: false,
+              bundleItems: [],
+              deliveryOptions: ['pickup', 'courier'],
+            },
+            {
+              id: 'pb57',
+              name: 'Kalabasa',
+              description: 'Sweet and nutritious pumpkin',
+              price: 40,
+              stock: 80,
+              images: ['https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80'],
+              category: 'vegetables',
+              status: [],
+              isBundle: false,
+              bundleItems: [],
+              deliveryOptions: ['pickup'],
+            },
+          ],
+        },
+      ];
+
+      // Helper: Create a unique random ID - use simple counter for demo
+      let idCounter = 1000;
+      function generateId() {
+        return 'id_' + (++idCounter);
+      }
+
+      // Authentication context provider
+      function AuthProvider({ children }) {
+        const [user, setUser] = useState(() => {
+          // try loading logged in user from sessionStorage
+          const stored = sessionStorage.getItem('bayanihan-user');
+          return stored ? JSON.parse(stored) : null;
+        });
+
+        function login(userData) {
+          setUser(userData);
+          sessionStorage.setItem('bayanihan-user', JSON.stringify(userData));
+        }
+        function logout() {
+          setUser(null);
+          sessionStorage.removeItem('bayanihan-user');
+          window.location.href = '/';
+        }
+        const value = { user, login, logout };
+        return React.createElement(AuthContext.Provider, { value }, children);
+      }
+
+      // Cart context provider
+      function CartProvider({ children }) {
+        const [cart, setCart] = useState(() => {
+          const stored = sessionStorage.getItem('bayanihan-cart');
+          return stored ? JSON.parse(stored) : [];
+        });
+
+        function addToCart(product) {
+          setCart(curr => {
+            const existingIndex = curr.findIndex(p => p.id === product.id);
+            let newCart;
+            if(existingIndex >= 0){
+              newCart = [...curr];
+              newCart[existingIndex].quantity += product.quantity;
+              if (newCart[existingIndex].quantity > product.stock) newCart[existingIndex].quantity = product.stock;
+            } else {
+              newCart = [...curr, product];
+            }
+            sessionStorage.setItem('bayanihan-cart', JSON.stringify(newCart));
+            return newCart;
+          });
+        }
+        function updateQuantity(productId, quantity) {
+          setCart(curr => {
+            const newCart = curr.map(p => p.id === productId ? { ...p, quantity } : p);
+            sessionStorage.setItem('bayanihan-cart', JSON.stringify(newCart));
+            return newCart;
+          });
+        }
+        function removeFromCart(productId) {
+          setCart(curr => {
+            const newCart = curr.filter(p => p.id !== productId);
+            sessionStorage.setItem('bayanihan-cart', JSON.stringify(newCart));
+            return newCart;
+          });
+        }
+        function clearCart() {
+          setCart([]);
+          sessionStorage.removeItem('bayanihan-cart');
+        }
+
+        return React.createElement(
+          CartContext.Provider,
+          { value: { cart, addToCart, updateQuantity, removeFromCart, clearCart } },
+          children
+        );
+      }
+
+      // Utility: Get seller by ID
+      function findSellerById(sellerId) {
+        if (!sellerId) return null;
+        return sellersDB.find(s => s.id === sellerId);
+      }
+
+      // Utility: Generate sharable full store URL for sellers
+      function generateStoreLink(seller) {
+        if (!seller || !seller.storeName) return '';
+        // create url-friendly slug from storeName
+        const slug = seller.storeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        return `https://bayanihanmarket.ph/store/${slug}`;
+      }
+
+      // Utility: Generate sharable full product link
+      function generateProductLink(seller, product) {
+        if (!seller || !product) return '';
+        const storeSlug = seller.storeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const productSlug = product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        return `https://bayanihanmarket.ph/store/${storeSlug}/product/${productSlug}`;
+      }
+
+      // ====================
+      // Components start here
+      // ====================
+
+      // Header and Navigation
+      function Header() {
+        const auth = useContext(AuthContext);
+        const user = auth.user;
+        const navigate = useNavigate();
+
+        return (
+          <header>
+            <div className="nav-container" aria-label="Primary navigation">
+              <Link to="/" className="logo" aria-label="Bayanihan Market Homepage" tabIndex={0}>Bayanihan Market</Link>
+              <nav aria-label="Main menu">
+                <NavLink to="/browse" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Browse Products</NavLink>
+                {user?.role === 'seller' ? (
+                  <NavLink to="/seller-dashboard" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Seller Dashboard</NavLink>
+                ) : (
+                  <NavLink to="/become-seller" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Become a Seller</NavLink>
+                )}
+                <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>About Us</NavLink>
+                <NavLink to="/help" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Help / Contact</NavLink>
+                {!user ? (
+                  <>
+                    <NavLink to="/login" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Login</NavLink>
+                    <NavLink to="/register" className={({ isActive }) => isActive ? 'active' : ''} tabIndex={0}>Register</NavLink>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ color: '#83c5be', fontWeight: '700', marginRight: '1rem' }}>Welcome, {user.name}</span>
+                    <button onClick={() => auth.logout()} aria-label="Logout from account">Logout</button>
+                  </>
+                )}
+              </nav>
+            </div>
+          </header>
+        );
+      }
+
+      // Home Page with Hero, Search Bar, Featured Sellers, Featured Categories
+      function Home() {
+        const navigate = useNavigate();
+
+        return (
+          <main>
+            <section className="hero" aria-label="Hero section">
+              <h1>Support Local Filipino Farmers & Vendors</h1>
+              <p>Shop fresh, handmade, and local products from your nearby barangay or city.</p>
+              <button onClick={() => navigate('/browse')} aria-label="Shop Now">Shop Now</button>
+            </section>
+            <section className="container" aria-label="Search products or sellers">
+              <SearchBar onSearch={({ query, location, category }) => {
+                const params = new URLSearchParams();
+                if (query) params.set('query', query);
+                if (location) params.set('location', location);
+                if (category) params.set('category', category);
+                navigate('/browse?' + params.toString());
+              }} />
+            </section>
+            <section className="container" aria-label="Featured Sellers">
+              <h2>Featured Sellers</h2>
+              <div className="cards-grid">
+                {sellersDB.map(seller => (
+                  <SellerCard key={seller.id} seller={seller} />
+                ))}
+              </div>
+            </section>
+            <section className="container" aria-label="Featured Categories">
+              <h2>Featured Categories</h2>
+              <div className="cards-grid">
+                {sellerCategories.map(cat => (
+                  <CategoryCard key={cat.id} category={cat} />
+                ))}
+              </div>
+            </section>
+          </main>
+        );
+      }
+
+      // SearchBar component (used on Home and Browse pages)
+      function SearchBar({ onSearch }) {
+        const [query, setQuery] = useState('');
+        const [filterLocation, setFilterLocation] = useState('');
+        const [filterCategory, setFilterCategory] = useState('');
+
+        function performSearch(e) {
+          e.preventDefault();
+          if (onSearch) {
+            onSearch({
+              query: query.trim(),
+              location: filterLocation,
+              category: filterCategory,
+            });
+          }
+        }
+
+        // Collect unique locations from sellers for dropdown
+        const locations = Array.from(new Set(sellersDB.map(seller => seller.location).filter(l => !!l)));
+
+        return (
+          <form className="search-bar" role="search" onSubmit={performSearch} aria-label="Search products or sellers">
+            <input
+              type="text"
+              placeholder="Search by product or seller"
+              aria-label="Search by product or seller"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              tabIndex={0}
+            />
+            <select
+              value={filterLocation}
+              onChange={e => setFilterLocation(e.target.value)}
+              aria-label="Filter by location"
+              tabIndex={0}
+            >
+              <option value="">All Locations</option>
+              {locations.map(loc => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+            <select
+              value={filterCategory}
+              onChange={e => setFilterCategory(e.target.value)}
+              aria-label="Filter by category"
+              tabIndex={0}
+            >
+              <option value="">All Categories</option>
+              {sellerCategories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+            <button type="submit" tabIndex={0}>Search</button>
+          </form>
+        );
+      }
+
+
+      // Seller Card for featured sellers on home page
+      function SellerCard({ seller }) {
+        const navigate = useNavigate();
+        return (
+          <article className="card" tabIndex={0} aria-label={`Seller ${seller.storeName}`}>
+            <img src={seller.logoUrl} alt={`${seller.storeName} logo`} loading="lazy" />
+            <div className="card-content">
+              <h3>{seller.storeName}</h3>
+              <p>{seller.storeDescription || seller.location}</p>
+              <button onClick={() => navigate(`/store/${seller.id}`)} aria-label={`Visit shop of ${seller.storeName}`}>Visit Shop</button>
+            </div>
+          </article>
+        );
+      }
+
+      // Category card for featured categories
+      function CategoryCard({ category }) {
+        const navigate = useNavigate();
+        // image placeholders for category
+        const catImages = {
+          farmer: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=60',
+          fisherfolk: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=60',
+          crafts_vendor: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=60',
+          baker: 'https://images.unsplash.com/photo-1574333752793-cd9f69812018?auto=format&fit=crop&w=400&q=60',
+          homemade_goods: 'https://images.unsplash.com/photo-1573830071472-e5af6e3cbce7?auto=format&fit=crop&w=400&q=60',
+          sari_sari_store: 'https://images.unsplash.com/photo-1502324515428-84ca01a74a50?auto=format&fit=crop&w=400&q=60',
+          others: 'https://images.unsplash.com/photo-1522974780141-24e1d07adc96?auto=format&fit=crop&w=400&q=60',
+        };
+        return (
+          <article className="card" tabIndex={0} aria-label={`Category ${category.name}`}>
+            <img src={catImages[category.id] || catImages['others']} alt={category.name} loading="lazy" />
+            <div className="card-content">
+              <h3>{category.name}</h3>
+              <button onClick={() => navigate(`/browse?category=${category.id}`)} aria-label={`View products in category ${category.name}`}>
+                View Category
+              </button>
+            </div>
+          </article>
+        );
+      }
+
+      // Browse Products Page
+      function Browse() {
+        const navigate = useNavigate();
+        const location = useLocation();
+        const searchParams = new URLSearchParams(location.search);
+        const categoryParam = searchParams.get('category') || '';
+        const locationFilterParam = searchParams.get('location') || '';
+        const queryParam = searchParams.get('query') || '';
+
+        // State for filters
+        const [query, setQuery] = useState(queryParam);
+        const [categoryFilter, setCategoryFilter] = useState(categoryParam);
+        const [locationFilter, setLocationFilter] = useState(locationFilterParam);
+        const [filteredProducts, setFilteredProducts] = useState([]);
+
+        // Aggregate products from sellersDB
+        const allProducts = sellersDB.reduce((acc, seller) => {
+          const prodsWithSeller = seller.products.map(prod => ({ ...prod, seller }));
+          return acc.concat(prodsWithSeller);
+        }, []);
+
+        // Filter products when filters or query change
+        useEffect(() => {
+          let filtered = allProducts;
+          if (query.trim()) {
+            const q = query.toLowerCase();
+            filtered = filtered.filter(p =>
+              p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.seller.storeName.toLowerCase().includes(q)
+            );
+          }
+          if (categoryFilter) {
+            filtered = filtered.filter(p => {
+              if (!p.category) return false;
+              // Allow simple match or alias here, for demo assume exact category or seller category
+              return p.category === categoryFilter || p.seller.category === categoryFilter;
+            });
+          }
+          if (locationFilter) {
+            filtered = filtered.filter(p => p.seller.location === locationFilter);
+          }
+          setFilteredProducts(filtered);
+        }, [query, categoryFilter, locationFilter]);
+
+        function doSearch(opts) {
+          // Rebuild URL with query params and navigate to it
+          let params = new URLSearchParams();
+          if (opts.query) params.set('query', opts.query);
+          if (opts.category) params.set('category', opts.category);
+          if (opts.location) params.set('location', opts.location);
+          navigate('/browse?' + params.toString());
+          setQuery(opts.query || '');
+          setCategoryFilter(opts.category || '');
+          setLocationFilter(opts.location || '');
+        }
+
+        return (
+          <main className="container" role="main" aria-label="Browse products">
+            <h2>Browse Products</h2>
+            <SearchBar onSearch={doSearch} />
+            <div className="cards-grid" aria-live="polite">
+              {filteredProducts.length === 0 ? (
+                <p>No products found matching your criteria.</p>
+              ) : (
+                filteredProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              )}
+            </div>
+          </main>
+        );
+      }
+
+      // Product Card used in browse and store
+      function ProductCard({ product }) {
+        const navigate = useNavigate();
+
+        // Display status badges if any
+        const badges = [];
+        if (product.status?.includes('featured')) badges.push('Featured');
+        if (product.status?.includes('preorder')) badges.push('Pre-Order');
+        if (product.status?.includes('soldout')) badges.push('Sold Out');
+        if (product.status?.includes('bundle')) badges.push('Bundle Deal');
+
+        return (
+          <article className="card" tabIndex={0} aria-label={"Product " + product.name}>
+            <img src={product.images[0] || 'https://via.placeholder.com/400x300?text=No+Image'} alt={product.name} loading="lazy" />
+            <div className="card-content">
+              <h3>{product.name}</h3>
+              <p>₱ {product.price.toFixed(2)}</p>
+              <p style={{ fontWeight: '600', fontSize: '0.75rem', marginBottom: '0.6rem' }}>{product.seller.storeName}</p>
+              <div style={{ marginBottom: '0.8rem' }}>
+                {badges.map(badge => {
+                  const className = badge.toLowerCase().replace(' ', '');
+                  return <span key={badge} className={`badge badge-${className}`} aria-label={badge}>{badge}</span>;
+                })}
+              </div>
+              <button onClick={() => navigate(`/product/${product.seller.id}/${product.id}`)} aria-label={`View details of ${product.name}`}>View Details</button>
+            </div>
+          </article>
+        );
+      }
+
+      // Product Detail Page with Add to Cart, Buy Now, and Chat seller modal
+      function ProductDetail() {
+        const { sellerId, productId } = useParams();
+        const navigate = useNavigate();
+        const auth = useContext(AuthContext);
+        const { addToCart } = useContext(CartContext);
+
+        const seller = sellersDB.find(s => s.id === sellerId);
+        const product = seller?.products.find(p => p.id === productId);
+
+        const [quantity, setQuantity] = useState(1);
+        const [messageModalOpen, setMessageModalOpen] = useState(false);
+        const [copySuccess, setCopySuccess] = useState('');
+
+        if (!seller || !product) {
+          return (
+            <main className="container" aria-label="Product not found">
+              <h2>Product Not Found</h2>
+              <p>The product you requested does not exist.</p>
+              <button onClick={() => navigate(-1)}>Go Back</button>
+            </main>
+          );
+        }
+
+        function handleAdd() {
+          if (quantity > product.stock) {
+            alert('Not enough stock available');
+            return;
+          }
+          addToCart({ ...product, seller, quantity });
+          alert(`Added ${quantity} x ${product.name} to cart`);
+        }
+        function handleBuy() {
+          if (quantity > product.stock) {
+            alert('Not enough stock available');
+            return;
+          }
+          addToCart({ ...product, seller, quantity });
+          navigate('/checkout');
+        }
+
+        function copyLink() {
+          const link = generateProductLink(seller, product);
+          navigator.clipboard.writeText(link).then(() => {
+            setCopySuccess('Link copied!');
+            setTimeout(() => setCopySuccess(''), 2000);
+          });
+        }
+
+        return (
+          <main className="container" aria-label={`Product detail for ${product.name}`}>
+            <button onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }} aria-label="Go back to previous page">← Back</button>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+              <div style={{ flex: '1 1 320px', minWidth: '280px' }}>
+                {product.images.length > 1 ? <ImageCarousel images={product.images} /> : (
+                  <img src={product.images[0]} alt={product.name} style={{ width: '100%', borderRadius: '14px', objectFit: 'cover' }} />
+                )}
+              </div>
+              <div style={{ flex: '1 1 320px', minWidth: '280px' }}>
+                <h2>{product.name}</h2>
+                <p style={{ fontSize: '1.1rem', color: '#555', marginBottom: '1rem' }}>{product.description}</p>
+                <p style={{ fontWeight: '700', fontSize: '1.6rem', marginBottom: '0.75rem', color: '#014f56' }}>₱ {product.price.toFixed(2)}</p>
+                <p><strong>Available Stock:</strong> {product.stock}</p>
+                <SellerInfoBlock seller={seller} />
+                <div style={{ marginTop: '0.8rem' }}>
+                  <label htmlFor="quantity-selector" style={{ fontWeight: '700' }}>Quantity</label>
+                  <input
+                    id="quantity-selector"
+                    type="number"
+                    min="1"
+                    max={product.stock}
+                    value={quantity}
+                    onChange={e => {
+                      let v = parseInt(e.target.value);
+                      if (isNaN(v) || v < 1) v = 1;
+                      if (v > product.stock) v = product.stock;
+                      setQuantity(v);
+                    }}
+                    style={{ width: '80px', fontSize: '1rem', borderRadius: '8px', marginTop: '0.15rem' }}
+                    aria-describedby="quantity-help"
+                  />
+                  <div id="quantity-help" style={{ fontSize: '0.8rem', color: '#666', marginBottom: '1rem' }}>Enter quantity up to {product.stock}</div>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <button onClick={handleAdd}>Add to Cart</button>
+                  <button onClick={handleBuy}>Buy Now</button>
+                  <button onClick={() => setMessageModalOpen(true)} style={{ backgroundColor: '#83c5be', color: '#014f56', fontWeight: '700', flexGrow: 1 }}>Chat Seller</button>
+                </div>
+                <div style={{ marginTop: '1.3rem', fontWeight: '600', fontSize: '1rem', cursor: 'pointer', userSelect: 'none' }}>
+                  <button onClick={copyLink} style={{ backgroundColor: '#014f56', color: 'white', borderRadius: '12px', padding: '0.4rem 1rem' }} aria-label="Copy share link for product">Copy Share Link</button>
+                  {copySuccess && <span style={{ marginLeft: '10px', color: '#5ca88b' }}>{copySuccess}</span>}
+                </div>
+              </div>
+            </div>
+            {messageModalOpen && <MessageModal seller={seller} onClose={() => setMessageModalOpen(false)} />}
+          </main>
+        );
+      }
+
+      // Seller info block display in product detail and store page
+      function SellerInfoBlock({ seller }) {
+        const navigate = useNavigate();
+        if (!seller) return null;
+
+        const storeLink = generateStoreLink(seller);
+
+        return (
+          <div aria-label="Seller information" style={{ marginTop: '1.2rem', padding: '0.7rem', borderRadius: '14px', backgroundColor: '#f0f6f6', boxShadow: 'inset 1px 1px 3px #dbe7e8' }}>
+            <h3>{seller.storeName}</h3>
+            <p>{seller.storeDescription}</p>
+            <p><strong>Location:</strong> {seller.location}</p>
+            <button onClick={() => navigate(`/store/${seller.id}`)} aria-label={`View shop of ${seller.storeName}`}>View Shop</button>
+            <button onClick={() => {
+              if ('share' in navigator) {
+                navigator.share({
+                  title: seller.storeName,
+                  url: storeLink,
+                });
+              } else {
+                navigator.clipboard.writeText(storeLink).then(() => {
+                  alert('Store link copied to clipboard');
+                });
+              }
+            }} style={{marginLeft:'1rem', backgroundColor:'#006d77'}}>Share Store</button>
+          </div>
+        );
+      }
+
+      // Simple image carousel for multiple product images
+      function ImageCarousel({ images }) {
+        const [index, setIndex] = useState(0);
+        function prev() {
+          setIndex(i => (i === 0 ? images.length - 1 : i - 1));
+        }
+        function next() {
+          setIndex(i => (i === images.length - 1 ? 0 : i + 1));
+        }
+        return (
+          <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden' }}>
+            <img src={images[index]} alt={`Product image ${index + 1}`} style={{ width: '100%', display: 'block', borderRadius: '14px', objectFit: 'cover', aspectRatio: '4 / 3' }} loading="lazy" />
+            {images.length > 1 && (
+              <>
+                <button onClick={prev} aria-label="Previous image" style={{
+                  position: 'absolute', top: '50%', left: '12px', transform: 'translateY(-50%)',
+                  background: 'rgba(0,0,0,0.3)', borderRadius: '50%', width: '36px', height: '36px',
+                  color: 'white', border: 'none', cursor: 'pointer', fontSize: '24px',
+                  userSelect: 'none',
+                }}>‹</button>
+                <button onClick={next} aria-label="Next image" style={{
+                  position: 'absolute', top: '50%', right: '12px', transform: 'translateY(-50%)',
+                  background: 'rgba(0,0,0,0.3)', borderRadius: '50%', width: '36px', height: '36px',
+                  color: 'white', border: 'none', cursor: 'pointer', fontSize: '24px',
+                  userSelect: 'none',
+                }}>›</button>
+              </>
+            )}
+          </div>
+        );
+      }
+
+      // Store page - seller profile and their products
+      function StorePage() {
+        const { sellerId } = useParams();
+        const navigate = useNavigate();
+
+        const seller = sellersDB.find(s => s.id === sellerId);
+
+        if (!seller) {
+          return (
+            <main className="container" aria-label="Store not found">
+              <h2>Store Not Found</h2>
+              <p>This store does not exist or has been removed.</p>
+              <button onClick={() => navigate(-1)}>Go Back</button>
+            </main>
+          );
+        }
+
+        return (
+          <main className="container" aria-label={`Store page for ${seller.storeName}`}>
+            <button onClick={() => navigate(-1)} style={{ marginBottom: '1rem' }}>← Back</button>
+            <div style={{
+              position: 'relative',
+              height: '200px',
+              borderRadius: '14px',
+              overflow: 'hidden',
+              marginBottom: '1rem',
+              backgroundImage: `url(${seller.bannerUrl || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80'})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}>
+              <img src={seller.logoUrl} alt={`${seller.storeName} logo`} style={{
+                position: 'absolute',
+                bottom: '-28px',
+                left: '20px',
+                width: '96px',
+                borderRadius: '20px',
+                border: '5px solid white',
+                backgroundColor: '#f9fafb',
+                objectFit: 'cover',
+                boxShadow: '0 3px 14px rgba(0,0,0,0.2)',
+              }} />
+            </div>
+            <h1>{seller.storeName}</h1>
+            <p><em>{seller.storeDescription}</em></p>
+            <p><strong>Location:</strong> {seller.location}</p>
+            <p><strong>Pickup Instructions:</strong> {seller.pickupInstructions || 'N/A'}</p>
+            <ShareModalLauncher seller={seller} />
+            <h2 style={{ marginTop: '2rem' }}>Products</h2>
+            {seller.products.length === 0 ? (
+              <p>No products listed yet.</p>
+            ) : (
+              <div className="cards-grid">
+                {seller.products.map(product => (
+                  <ProductCard key={product.id} product={{ ...product, seller }} />
+                ))}
+              </div>
+            )}
+            <ContactSellerFAB seller={seller} />
+          </main>
+        );
+      }
+
+      // Share modal launcher with QR code and social links for store and product
+      function ShareModalLauncher({ seller, product }) {
+        const [modalOpen, setModalOpen] = useState(false);
+
+        return (
+          <>
+            <button onClick={() => setModalOpen(true)} aria-label="Share link" style={{ margin: '1rem 0', fontWeight: '700', fontSize: '1.1rem' }}>Share {product ? 'Product' : 'Store'}</button>
+            {modalOpen && <ShareModal onClose={() => setModalOpen(false)} seller={seller} product={product} />}
+          </>
+        );
+      }
+
+      // Share modal component - shows copy link and QR code
+      function ShareModal({ seller, product, onClose }) {
+        const modalRef = useRef(null);
+        const link = product ? generateProductLink(seller, product) : generateStoreLink(seller);
+        const [copySuccess, setCopySuccess] = useState('');
+
+        useEffect(() => {
+          function handleKeyDown(e) {
+            if (e.key === 'Escape') {
+              onClose();
+            }
+          }
+          document.addEventListener('keydown', handleKeyDown);
+          return () => document.removeEventListener('keydown', handleKeyDown);
+        }, [onClose]);
+
+        useEffect(() => {
+          // Generate QR code in canvas
+          if (!modalRef.current) return;
+          const canvas = modalRef.current.querySelector('canvas');
+          if (!canvas) return;
+          const QRCode = window.QRCode;
+          QRCode.toCanvas(canvas, link, { width: 200, margin: 1 }, function (error) {
+            if (error) console.error(error);
+          });
+        }, [link]);
+
+        function copyToClipboard() {
+          navigator.clipboard.writeText(link).then(() => {
+            setCopySuccess('Copied!');
+            setTimeout(() => setCopySuccess(''), 2000);
+          });
+        }
+
+        return (
+          <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="share-modal-title" onClick={e => {
+            if (e.target.className === 'modal-overlay') onClose();
+          }}>
+            <div className="modal" ref={modalRef}>
+              <button className="close-btn" aria-label="Close share dialog" onClick={onClose}>&times;</button>
+              <h3 id="share-modal-title">Share {product ? 'Product' : 'Store'}</h3>
+              <p>Share this link with your friends and customers:</p>
+              <input type="text" readOnly value={link} aria-label="Shareable link" onFocus={(e) => e.target.select()} style={{ width: '100%', padding: '0.4em 0.6em', fontSize: '0.9rem', marginBottom: '0.7rem', userSelect: 'all' }} />
+              <button onClick={copyToClipboard} style={{marginBottom:'0.8rem'}}>Copy Link</button>
+              {copySuccess && <p style={{ color: 'green', marginBottom: '0.8rem' }}>{copySuccess}</p>}
+              <canvas aria-label="QR code for share link" style={{ display: 'block', margin: '0 auto 1rem' }}></canvas>
+              <p style={{ fontSize: '0.85rem', color: '#777' }}>Scan this QR code or share the link over social media, SMS, or print it.</p>
+            </div>
+          </div>
+        );
+      }
+
+      // Contact Seller button floating action button - opens chat modal
+      function ContactSellerFAB({ seller }) {
+        const [open, setOpen] = useState(false);
+
+        if(!seller) return null;
+        return (
+          <>
+            <button aria-label="Contact seller" className="fab-message" onClick={() => setOpen(true)}>
+              💬
+            </button>
+            {open && <MessageModal seller={seller} onClose={() => setOpen(false)} />}
+          </>
+        );
+      }
+
+      // Messaging modal simulating chat between buyer and seller
+      function MessageModal({ seller, onClose }) {
+        const auth = useContext(AuthContext);
+        const [messages, setMessages] = useState(() => {
+          // Load from session storage or start new empty thread
+          const key = 'chat-' + seller.id + '-' + (auth.user?.id || 'guest');
+          const stored = sessionStorage.getItem(key);
+          return stored ? JSON.parse(stored) : [];
+        });
+        const [text, setText] = useState('');
+        const msgEndRef = useRef(null);
+
+        // Save messages to session storage on change
+        useEffect(() => {
+          const key = 'chat-' + seller.id + '-' + (auth.user?.id || 'guest');
+          sessionStorage.setItem(key, JSON.stringify(messages));
+        }, [messages, seller.id, auth.user]);
+
+        // Auto scroll to last message
+        useEffect(() => {
+          if(msgEndRef.current) {
+            msgEndRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, [messages]);
+
+        function sendMessage() {
+          if (!text.trim()) return;
+          setMessages(curr => [...curr, { direction: 'buyer', text: text.trim(), timestamp: Date.now() }]);
+          setText('');
+
+          // Simulate seller response after 1.5s
+          setTimeout(() => {
+            setMessages(curr => [...curr, { direction: 'seller', text: 'Thank you for your message! We will get back to you shortly.', timestamp: Date.now() }]);
+          }, 1500);
+        }
+
+        function handleKeydown(e) {
+          if(e.key === 'Enter' && !e.shiftKey){
+            e.preventDefault();
+            sendMessage();
+          }
+        }
+
+        return (
+          <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="chat-modal-title" onClick={e => {
+            if (e.target.className === 'modal-overlay') onClose();
+          }}>
+            <div className="modal" style={{ maxWidth: '420px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+              <button className="close-btn" aria-label="Close chat modal" onClick={onClose}>&times;</button>
+              <h3 id="chat-modal-title" style={{ marginBottom: '1rem' }}>Chat with {seller.storeName}</h3>
+              <div className="message-thread" role="log" aria-live="polite" aria-relevant="additions">
+                {messages.length === 0 && <p style={{ fontSize: '0.9rem', color: '#555' }}>Send your message to start the conversation.</p>}
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={'message ' + (msg.direction === 'buyer' ? 'buyer' : 'seller')}
+                    aria-label={msg.direction === 'buyer' ? 'Your message' : 'Seller message'}
+                  >
+                    {msg.text}
+                  </div>
+                ))}
+                <div ref={msgEndRef}></div>
+              </div>
+              <textarea
+                rows="3"
+                placeholder="Type a message..."
+                value={text}
+                onChange={e => setText(e.target.value)}
+                onKeyDown={handleKeydown}
+                aria-label="Chat message text input"
+                style={{ resize: 'none', fontSize: '1rem', marginBottom: '0.5rem' }}
+              />
+              <button onClick={sendMessage} aria-label="Send chat message" disabled={!text.trim()}>Send</button>
+            </div>
+          </div>
+        );
+      }
+
+      // Become Seller registration & onboarding with curated product templates
+      function BecomeSeller() {
+        const auth = useContext(AuthContext);
+        const navigate = useNavigate();
+
+        // Registration fields
+        const [phase, setPhase] = useState('registration'); // registration or onboarding
+        const [registrationData, setRegistrationData] = useState({
+          name: '',
+          email: '',
+          password: '',
+          barangay: '',
+          city: '',
+          province: '',
+          storeName: '',
+          storeCategory: '',
+          storeDescription: '',
+          storeLogoFile: null,
+          idVerificationFile: null,
+        });
+
+        // Onboarding curated products states
+        const [curatedProducts, setCuratedProducts] = useState([]);
+        const [customProducts, setCustomProducts] = useState([]);
+
+        // Form validation errors
+        const [error, setError] = useState('');
+
+        // When category changes, update curated products from templates
+        useEffect(() => {
+          if(registrationData.storeCategory) {
+            const templates = curatedTemplates[registrationData.storeCategory] || [];
+            // Copy template products with active checkbox true
+            const initialCurated = templates.map(p => ({ ...p, active: true, price: p.price, description: p.description }));
+            setCuratedProducts(initialCurated);
+          }
+        }, [registrationData.storeCategory]);
+
+        // Input handlers
+        function handleChange(e) {
+          const { name, value, files } = e.target;
+          if (files) {
+            setRegistrationData(d => ({ ...d, [name]: files[0] }));
+          } else {
+            setRegistrationData(d => ({ ...d, [name]: value }));
+          }
+        }
+
+        // Registration submit handler
+        function handleRegister(e) {
+          e.preventDefault();
+          // Basic validation
+          if (!registrationData.storeCategory || !registrationData.email || !registrationData.name || !registrationData.password ||
+              !registrationData.barangay || !registrationData.city || !registrationData.province || !registrationData.storeName) {
+            setError('Please fill all required fields marked with *');
+            return;
+          }
+          setError('');
+          setPhase('onboarding');
+        }
+
+        // Toggle curated product's active status
+        function toggleCuratedProductActive(idx) {
+          setCuratedProducts(curr => {
+            const copy = [...curr];
+            copy[idx].active = !copy[idx].active;
+            return copy;
+          });
+        }
+
+        // Update curated product details
+        function updateCuratedProductField(idx, field, value) {
+          setCuratedProducts(curr => {
+            const copy = [...curr];
+            copy[idx][field] = value;
+            return copy;
+          });
+        }
+
+        // Add a new custom product
+        function addCustomProduct() {
+          setCustomProducts(curr => [...curr, {
+            id: generateId(),
+            name: '',
+            description: '',
+            price: 0,
+            imageFile: null,
+            active: true,
+          }]);
+        }
+
+        // Update a custom product field
+        function updateCustomProductField(id, field, value) {
+          setCustomProducts(curr => curr.map(p => p.id === id ? { ...p, [field]: value } : p));
+        }
+
+        // Remove a custom product
+        function removeCustomProduct(id) {
+          setCustomProducts(curr => curr.filter(p => p.id !== id));
+        }
+
+        // Onboarding submit handler: save seller and products
+        function handleFinishOnboarding(e) {
+          e.preventDefault();
+          // Collate active curated and custom products
+          let finalProducts = [];
+          if (curatedProducts.length) {
+            finalProducts = finalProducts.concat(curatedProducts.filter(p => p.active).map(p => ({
+              id: generateId(),
+              name: p.name,
+              description: p.description,
+              price: +p.price,
+              images: p.imageFile ? [URL.createObjectURL(p.imageFile)] : [p.image],
+              category: registrationData.storeCategory,
+              stock: 100,
+              status: [],
+              isBundle: false,
+              bundleItems: [],
+              deliveryOptions: ['pickup', 'courier'],
+            })));
+          }
+          if (customProducts.length) {
+            finalProducts = finalProducts.concat(customProducts.filter(p => p.active && p.name.trim()).map(p => ({
+              id: generateId(),
+              name: p.name,
+              description: p.description,
+              price: +p.price,
+              images: p.imageFile ? [URL.createObjectURL(p.imageFile)] : ['https://via.placeholder.com/400x300?text=No+Image'],
+              category: registrationData.storeCategory,
+              stock: 50,
+              status: [],
+              isBundle: false,
+              bundleItems: [],
+              deliveryOptions: ['pickup', 'courier'],
+            })));
+          }
+
+          const newSeller = {
+            id: generateId(),
+            storeName: registrationData.storeName,
+            ownerName: registrationData.name,
+            email: registrationData.email,
+            password: registrationData.password,
+            role: 'seller',
+            location: `${registrationData.barangay}, ${registrationData.city}, ${registrationData.province}`,
+            category: registrationData.storeCategory,
+            storeDescription: registrationData.storeDescription,
+            logoUrl: registrationData.storeLogoFile ? URL.createObjectURL(registrationData.storeLogoFile) : `https://ui-avatars.com/api/?name=${encodeURIComponent(registrationData.storeName)}&background=83c5be&color=fff&rounded=true`,
+            bannerUrl: '',
+            pickupInstructions: '',
+            deliveryPartners: [],
+            products: finalProducts,
+            idVerificationFile: registrationData.idVerificationFile,
+          };
+          sellersDB.push(newSeller);
+          auth.login(newSeller);
+          alert('Congratulations! Your seller account has been registered and products added.');
+          navigate('/seller-dashboard');
+        }
+
+        // Render the registration form or onboarding form based on phase
+        return (
+          <main aria-label="Become a seller registration and onboarding">
+            {phase === 'registration' ? (
+              <form onSubmit={handleRegister} aria-label="Seller Registration Form" noValidate>
+                <h2>Register as Seller</h2>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <label htmlFor="storeCategory">Select Seller Category *:</label>
+                <select
+                  name="storeCategory"
+                  id="storeCategory"
+                  value={registrationData.storeCategory}
+                  onChange={handleChange}
+                  required
+                  tabIndex={0}
+                >
+                  <option value="">-- Select Category --</option>
+                  {sellerCategories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+                <label htmlFor="storeName">Store Name *:</label>
+                <input type="text" id="storeName" name="storeName" value={registrationData.storeName} onChange={handleChange} required tabIndex={0} />
+                <label htmlFor="storeDescription">Store Description:</label>
+                <textarea id="storeDescription" name="storeDescription" value={registrationData.storeDescription} onChange={handleChange} rows="3" tabIndex={0}></textarea>
+                <label htmlFor="name">Your Full Name *:</label>
+                <input type="text" id="name" name="name" value={registrationData.name} onChange={handleChange} required tabIndex={0} />
+                <label htmlFor="email">Email *:</label>
+                <input type="email" id="email" name="email" value={registrationData.email} onChange={handleChange} required tabIndex={0} />
+                <label htmlFor="password">Password *:</label>
+                <input type="password" id="password" name="password" value={registrationData.password} onChange={handleChange} required tabIndex={0} minLength={6} />
+                <fieldset style={{ marginTop: '1rem' }}>
+                  <legend>Location *:</legend>
+                  <label htmlFor="barangay">Barangay:</label>
+                  <input id="barangay" name="barangay" type="text" value={registrationData.barangay} onChange={handleChange} required tabIndex={0} />
+                  <label htmlFor="city">City:</label>
+                  <input id="city" name="city" type="text" value={registrationData.city} onChange={handleChange} required tabIndex={0} />
+                  <label htmlFor="province">Province:</label>
+                  <input id="province" name="province" type="text" value={registrationData.province} onChange={handleChange} required tabIndex={0} />
+                </fieldset>
+                <label htmlFor="storeLogoFile">Store Logo (optional):</label>
+                <input id="storeLogoFile" name="storeLogoFile" type="file" accept="image/*" onChange={handleChange} tabIndex={0} />
+                <label htmlFor="idVerificationFile">ID Verification Upload (optional):</label>
+                <input id="idVerificationFile" name="idVerificationFile" type="file" accept="image/*,application/pdf" onChange={handleChange} tabIndex={0} />
+                <button type="submit" aria-label="Submit Seller Registration">Continue to Product Onboarding</button>
+              </form>
+            ) : (
+              <form onSubmit={handleFinishOnboarding} aria-label="Seller Onboarding Product Selection Form" noValidate style={{ maxWidth: '900px', margin: '1rem auto' }}>
+                <h2>Step 2: Select Your Products</h2>
+
+                {curatedProducts.length > 0 && (
+                  <fieldset aria-describedby="curatedHelp" style={{ marginBottom: '1rem', border: '1px solid #ccc', borderRadius: '14px', padding: '1rem' }}>
+                    <legend><strong>Suggested Products</strong></legend>
+                    <p id="curatedHelp" style={{ fontSize: '0.9rem', color: '#555' }}>Select products to activate or skip. You can modify details.</p>
+                    {curatedProducts.map((prod, idx) => (
+                      <div key={idx} style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', alignItems: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={prod.active}
+                          onChange={() => toggleCuratedProductActive(idx)}
+                          aria-checked={prod.active}
+                          tabIndex={0}
+                          id={`curated-prod-checkbox-${idx}`}
+                        />
+                        <label htmlFor={`curated-prod-checkbox-${idx}`} style={{ flex: '1 1 auto', cursor: 'pointer' }}>
+                          <strong>{prod.name}</strong>
+                        </label>
+                        <div style={{ flex: '2 1 auto', minWidth: '250px' }}>
+                          <label htmlFor={`curated-name-${idx}`}>Name:</label>
+                          <input id={`curated-name-${idx}`} type="text" value={prod.name} onChange={e => updateCuratedProductField(idx, 'name', e.target.value)} required tabIndex={0} />
+                        </div>
+                        <div style={{ flex: '3 1 auto' }}>
+                          <label htmlFor={`curated-desc-${idx}`}>Description:</label>
+                          <input id={`curated-desc-${idx}`} type="text" value={prod.description} onChange={e => updateCuratedProductField(idx, 'description', e.target.value)} tabIndex={0} />
+                        </div>
+                        <div style={{ width: '100px' }}>
+                          <label htmlFor={`curated-price-${idx}`}>Price (₱):</label>
+                          <input id={`curated-price-${idx}`} type="number" min="0" step="0.01" value={prod.price} onChange={e => updateCuratedProductField(idx, 'price', e.target.value)} required tabIndex={0} />
+                        </div>
+                      </div>
+                    ))}
+                  </fieldset>
+                )}
+
+                <fieldset style={{ border: '1px solid #ccc', borderRadius: '14px', padding: '1rem', marginBottom: '1rem' }}>
+                  <legend><strong>Add Custom Products</strong></legend>
+                  <button type="button" aria-label="Add custom product" onClick={addCustomProduct} style={{ marginBottom: '1rem' }}>+ Add Custom Product</button>
+                  {customProducts.length === 0 && <p style={{ fontStyle: 'italic' }}>No custom products added yet.</p>}
+                  {customProducts.map(prod => (
+                    <div key={prod.id} style={{ border: '1px solid #999', borderRadius: '12px', padding: '0.6rem 0.8rem 0.8rem 0.8rem', marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <input
+                          type="checkbox"
+                          checked={prod.active}
+                          onChange={() => updateCustomProductField(prod.id, 'active', !prod.active)}
+                          aria-checked={prod.active}
+                          tabIndex={0}
+                          aria-label={`Activate custom product ${prod.name || '(unnamed)'}`}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Product Name"
+                          value={prod.name}
+                          onChange={e => updateCustomProductField(prod.id, 'name', e.target.value)}
+                          required
+                          tabIndex={0}
+                          style={{ flex: '1 1 220px' }}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Description"
+                          value={prod.description}
+                          onChange={e => updateCustomProductField(prod.id, 'description', e.target.value)}
+                          tabIndex={0}
+                          style={{ flex: '2 1 320px' }}
+                        />
+                        <input
+                          type="number"
+                          placeholder="Price"
+                          min="0"
+                          step="0.01"
+                          value={prod.price}
+                          onChange={e => updateCustomProductField(prod.id, 'price', e.target.value)}
+                          required
+                          tabIndex={0}
+                          style={{ width: '90px' }}
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={e => updateCustomProductField(prod.id, 'imageFile', e.target.files[0])}
+                          tabIndex={0}
+                          aria-label="Upload product image"
+                          style={{ flex: '0 0 140px' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeCustomProduct(prod.id)}
+                          aria-label={`Remove custom product ${prod.name || '(unnamed)'}`}
+                          style={{ backgroundColor: '#ba2525', padding: '0 0.6rem', color: 'white', fontWeight: '700' }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </fieldset>
+                <button type="submit" aria-label="Finish seller onboarding with selected products">Finish Onboarding & Register</button>
+              </form>
+            )}
+          </main>
+        );
+      }
+
+      // Seller Dashboard Component with all advanced seller options
+
+      function SellerDashboard() {
+        const auth = useContext(AuthContext);
+        const navigate = useNavigate();
+        const seller = sellersDB.find(s => s.id === auth.user?.id);
+
+        const [activePage, setActivePage] = useState('products');
+        const [sellerState, setSellerState] = useState(seller);
+
+        useEffect(() => {
+          // Update seller state when global DB changes (simulate sync)
+          setSellerState(sellersDB.find(s => s.id === auth.user?.id));
+        }, [auth.user]);
+
+        // Product management state
+        const [editingProduct, setEditingProduct] = useState(null);
+
+        // Helpers for product management
+        function saveProduct(updatedProduct) {
+          sellersDB = sellersDB.map(s => {
+            if (s.id === sellerState.id) {
+              let updatedProducts;
+              if (s.products.some(p => p.id === updatedProduct.id)) {
+                updatedProducts = s.products.map(p => p.id === updatedProduct.id ? updatedProduct : p);
+              } else {
+                updatedProducts = [...s.products, updatedProduct];
+              }
+              return { ...s, products: updatedProducts };
+            }
+            return s;
+          });
+          setSellerState(prev => ({
+            ...prev,
+            products: sellerState.products.some(p => p.id === updatedProduct.id)
+              ? sellerState.products.map(p => p.id === updatedProduct.id ? updatedProduct : p)
+              : [...sellerState.products, updatedProduct],
+          }));
+          setEditingProduct(null);
+        }
+        function deleteProduct(id) {
+          if (window.confirm('Are you sure you want to delete this product?')) {
+            sellersDB = sellersDB.map(s => {
+              if (s.id === sellerState.id) {
+                return {...s, products: s.products.filter(p => p.id !== id) };
+              }
+              return s;
+            });
+            setSellerState(prev => ({
+              ...prev,
+              products: sellerState.products.filter(p => p.id !== id),
+            }));
+          }
+        }
+        function toggleProductStatus(prodId, status) {
+          sellersDB = sellersDB.map(s => {
+            if (s.id === sellerState.id) {
+              let updatedProducts = s.products.map(p => {
+                if(p.id === prodId) {
+                  let newStatuses = p.status.includes(status)
+                    ? p.status.filter(st => st !== status)
+                    : [...p.status, status];
+                  return {...p, status: newStatuses};
+                }
+                return p;
+              });
+              return {...s, products: updatedProducts};
+            }
+            return s;
+          });
+          setSellerState(prev => ({
+            ...prev,
+            products: prev.products.map(p => {
+              if(p.id === prodId){
+                let newStatuses = p.status.includes(status)
+                  ? p.status.filter(st => st !== status)
+                  : [...p.status, status];
+                return {...p, status: newStatuses};
+              }
+              return p;
+            }),
+          }));
+        }
+
+        // Store Settings update
+        function updateStoreSettings(changes) {
+          sellersDB = sellersDB.map(s => {
+            if(s.id === sellerState.id) {
+              return {...s, ...changes};
+            }
+            return s;
+          });
+          setSellerState(prev => ({...prev, ...changes}));
+        }
+
+        // Delivery partners add/edit/delete - simplified for demo
+        function addDeliveryPartner(partner) {
+          sellersDB = sellersDB.map(s => {
+            if(s.id === sellerState.id) {
+              const updatedPartners = [...(s.deliveryPartners || []), partner];
+              return {...s, deliveryPartners: updatedPartners};
+            }
+            return s;
+          });
+          setSellerState(prev => ({...prev, deliveryPartners: [...(prev.deliveryPartners || []), partner]}));
+        }
+        function removeDeliveryPartner(name) {
+          sellersDB = sellersDB.map(s => {
+            if(s.id === sellerState.id) {
+              const updatedPartners = (s.deliveryPartners || []).filter(p => p.name !== name);
+              return {...s, deliveryPartners: updatedPartners};
+            }
+            return s;
+          });
+          setSellerState(prev => ({...prev, deliveryPartners: (prev.deliveryPartners || []).filter(p => p.name !== name)}));
+        }
+
+        // Sales report generator - mock export CSV
+        function generateSalesReportCSV(){
+          // For demo, just export current products with status
+          let csvRows = [
+            ['Product Name', 'Price', 'Stock', 'Status'].join(','),
+            ...sellerState.products.map(p =>
+              [p.name, p.price.toFixed(2), p.stock, p.status.join('|')].join(',')
+            )
+          ];
+          const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+          const encodedUri = encodeURI(csvContent);
+          const link = document.createElement("a");
+          link.setAttribute('href', encodedUri);
+          link.setAttribute('download', `${sellerState.storeName.replace(/\W+/g, '')}_sales_report.csv`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
+        // Low stock alert threshold
+        const lowStockThreshold = 10;
+        const lowStockProducts = sellerState.products.filter(p => p.stock <= lowStockThreshold);
+
+        return (
+          <main className="dashboard" aria-label="Seller Dashboard">
+            <nav className="sidebar" aria-label="Seller Dashboard Navigation">
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('products'); }} className={activePage === 'products' ? 'active' : ''}>My Products</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('add_product'); }} className={activePage === 'add_product' ? 'active' : ''}>Add Product</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('orders'); }} className={activePage === 'orders' ? 'active' : ''}>Orders</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('messages'); }} className={activePage === 'messages' ? 'active' : ''}>Messages</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('store_settings'); }} className={activePage === 'store_settings' ? 'active' : ''}>Store Settings</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('delivery_settings'); }} className={activePage === 'delivery_settings' ? 'active' : ''}>Delivery Settings</a>
+              <a href="#" onClick={e => { e.preventDefault(); setActivePage('seller_tools'); }} className={activePage === 'seller_tools' ? 'active' : ''}>Seller Tools</a>
+              <button onClick={() => auth.logout()} aria-label="Logout from Seller Dashboard" style={{ marginTop: 'auto', padding: '1rem 2rem', fontWeight: '700' }}>Logout</button>
+            </nav>
+            <section className="dashboard-content">
+              {activePage === 'products' && <>
+                <h2>My Products</h2>
+                {lowStockProducts.length > 0 && (
+                  <aside style={{ backgroundColor: '#ffecb3', padding: '1rem', borderRadius: '12px', marginBottom: '1rem' }}>
+                    <h4 style={{ color: '#8a6d00' }}>Low Stock Alert</h4>
+                    <ul>
+                      {lowStockProducts.map(prod => (<li key={prod.id}>{prod.name} - Stock: {prod.stock}</li>))}
+                    </ul>
+                  </aside>
+                )}
+                {sellerState.products.length === 0 ? (
+                  <p>You have no products listed. Add some!</p>
+                ) : (
+                  <table aria-label="My products list" style={{userSelect:'none'}}>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Price (₱)</th>
+                        <th>Stock</th>
+                        <th>Delivery Options</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sellerState.products.map(p => (
+                        <tr key={p.id}>
+                          <td>{p.name}</td>
+                          <td>{sellerCategories.find(c => c.id === p.category)?.name || sellerCategories.find(c => c.id === sellerState.category)?.name || '-'}</td>
+                          <td>
+                            {p.status.map(s => (
+                              <span key={s} className={`badge badge-${s}`} aria-label={s} style={{marginRight: '4px'}}>{s}</span>
+                            ))}
+                          </td>
+                          <td>{p.price.toFixed(2)}</td>
+                          <td>{p.stock}</td>
+                          <td>{(p.deliveryOptions||[]).join(', ')}</td>
+                          <td style={{ whiteSpace: 'nowrap' }}>
+                            <button onClick={() => setEditingProduct(p)} aria-label={`Edit product ${p.name}`}>Edit</button>{' '}
+                            <button onClick={() => deleteProduct(p.id)} aria-label={`Delete product ${p.name}`} className="danger-btn">Delete</button>
+                            <br />
+                            {productStatusOptions.map(opt => (
+                              <label key={opt.id} style={{ userSelect: 'none', marginRight: '8px' }}>
+                                <input
+                                  type="checkbox"
+                                  checked={p.status.includes(opt.id)}
+                                  onChange={() => toggleProductStatus(p.id, opt.id)}
+                                />
+                                {opt.label}
+                              </label>
+                            ))}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+                {editingProduct && (
+                  <EditProductForm product={editingProduct} onCancel={() => setEditingProduct(null)} onSave={saveProduct}/>
+                )}
+              </>}
+
+              {activePage === 'add_product' && (
+                <>
+                  <h2>Add Product</h2>
+                  <EditProductForm onSave={saveProduct} onCancel={() => setActivePage('products')} />
+                </>
+              )}
+
+              {activePage === 'orders' && (
+                <>
+                  <h2>Orders</h2>
+                  <OrdersPlaceholder />
+                </>
+              )}
+
+              {activePage === 'messages' && (
+                <>
+                  <h2>Messages</h2>
+                  <MessagesPlaceholder seller={sellerState} />
+                </>
+              )}
+
+              {activePage === 'store_settings' && (
+                <>
+                  <h2>Store Settings</h2>
+                  <StoreSettingsForm seller={sellerState} onSave={updateStoreSettings} />
+                </>
+              )}
+
+              {activePage === 'delivery_settings' && (
+                <>
+                  <h2>Delivery Settings</h2>
+                  <DeliverySettingsForm seller={sellerState} addPartner={addDeliveryPartner} removePartner={removeDeliveryPartner} />
+                </>
+              )}
+
+              {activePage === 'seller_tools' && (
+                <>
+                  <h2>Seller Tools</h2>
+                  <SellerTools seller={sellerState} generateReport={generateSalesReportCSV} />
+                </>
+              )}
+            </section>
+          </main>
+        );
+      }
+
+      // Edit product form (create or update)
+      function EditProductForm({product, onCancel, onSave}) {
+        const [name, setName] = useState(product?.name || '');
+        const [description, setDescription] = useState(product?.description || '');
+        const [category, setCategory] = useState(product?.category || '');
+        const [price, setPrice] = useState(product?.price?.toString() || '0');
+        const [stock, setStock] = useState(product?.stock?.toString() || '0');
+        const [status, setStatus] = useState(product?.status || []);
+        const [deliveryOptions, setDeliveryOptions] = useState(product?.deliveryOptions || ['pickup', 'courier']);
+        const [imageFile, setImageFile] = useState(null);
+        const [previewUrl, setPreviewUrl] = useState(product?.images?.[0] || '');
+
+        function toggleStatus(id) {
+          setStatus(curr => curr.includes(id) ? curr.filter(s => s !== id) : [...curr, id]);
+        }
+        function toggleDeliveryOption(opt) {
+          setDeliveryOptions(curr => curr.includes(opt) ? curr.filter(o => o !== opt) : [...curr, opt]);
+        }
+        function handleSave(e) {
+          e.preventDefault();
+          if (!name.trim() || !category.trim() || isNaN(parseFloat(price)) || isNaN(parseInt(stock))) {
+            alert('Please fill in valid product name, category, price, stock');
+            return;
+          }
+          onSave({
+            id: product?.id || generateId(),
+            name: name.trim(),
+            description: description.trim(),
+            category,
+            price: parseFloat(price),
+            stock: parseInt(stock),
+            status,
+            images: imageFile ? [previewUrl] : product?.images || ['https://via.placeholder.com/400x300?text=No+Image'],
+            deliveryOptions,
+            isBundle: false,
+            bundleItems: [],
+          });
+        }
+        function handleImageChange(e) {
+          if(e.target.files.length) {
+            const file = e.target.files[0];
+            setImageFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+          }
+        }
+
+        return (
+          <form onSubmit={handleSave} style={{maxWidth:'650px', marginTop:'2rem'}}>
+            <label htmlFor="productName">Product Name</label>
+            <input id="productName" type="text" value={name} onChange={e => setName(e.target.value)} required tabIndex={0} />
+            <label htmlFor="productDesc">Description</label>
+            <textarea id="productDesc" value={description} rows="3" onChange={e => setDescription(e.target.value)} tabIndex={0} />
+            <label htmlFor="productCategory">Category</label>
+            <select id="productCategory" value={category} onChange={e => setCategory(e.target.value)} required tabIndex={0}>
+              <option value="">-- Select category --</option>
+              {sellerCategories.map(cat => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}
+            </select>
+            <label htmlFor="productPrice">Price (₱)</label>
+            <input id="productPrice" type="number" min="0" step="0.01" value={price} onChange={e => setPrice(e.target.value)} required tabIndex={0} />
+            <label htmlFor="productStock">Stock</label>
+            <input id="productStock" type="number" min="0" step="1" value={stock} onChange={e => setStock(e.target.value)} required tabIndex={0} />
+
+            <fieldset aria-label="Product status" style={{ marginTop: '1rem' }}>
+              <legend>Status Flags</legend>
+              {productStatusOptions.map(opt => (
+                <label key={opt.id} style={{ marginRight: '1rem' }}>
+                  <input type="checkbox" checked={status.includes(opt.id)} onChange={() => toggleStatus(opt.id)} /> {opt.label}
+                </label>
+              ))}
+            </fieldset>
+
+            <fieldset aria-label="Delivery options" style={{ marginTop: '1rem' }}>
+              <legend>Delivery Options</legend>
+              <label>
+                <input type="checkbox" checked={deliveryOptions.includes('pickup')} onChange={() => toggleDeliveryOption('pickup')} /> In-Store Pickup
+              </label>{' '}
+              <label>
+                <input type="checkbox" checked={deliveryOptions.includes('courier')} onChange={() => toggleDeliveryOption('courier')} /> Delivery (Courier)
+              </label>
+            </fieldset>
+
+            <label htmlFor="productImage" style={{ marginTop: '1rem' }}>Product Image</label>
+            <input id="productImage" type="file" accept="image/*" onChange={handleImageChange} tabIndex={0} />
+            {previewUrl && <img src={previewUrl} alt="Product preview" style={{ width: '200px', marginTop: '0.5rem', borderRadius: '12px' }} />}
+
+            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <button type="submit">{product ? 'Save Changes' : 'Add Product'}</button>
+              {onCancel && <button type="button" onClick={onCancel} style={{ backgroundColor: '#aaa', color: '#222' }}>Cancel</button>}
+            </div>
+          </form>
+        );
+      }
+
+      // Orders Placeholder component for demo
+      function OrdersPlaceholder() {
+        return (
+          <div>
+            <p>Orders management coming soon. This demo focuses on frontend seller features!</p>
+          </div>
+        );
+      }
+
+      // Messages Placeholder with simple inbox simulation
+      function MessagesPlaceholder({ seller }) {
+        return (
+          <div>
+            <p>Full real-time messaging is simulated only in product and store pages.</p>
+            <p>Seller inbox filters and status will be supported in production version.</p>
+          </div>
+        );
+      }
+
+      // Store Settings Form for seller to edit store info
+      function StoreSettingsForm({ seller, onSave }) {
+        const [storeName, setStoreName] = useState(seller.storeName);
+        const [description, setDescription] = useState(seller.storeDescription || '');
+        const [pickupInstructions, setPickupInstructions] = useState(seller.pickupInstructions || '');
+        const [logoFile, setLogoFile] = useState(null);
+        const [logoPreview, setLogoPreview] = useState(seller.logoUrl);
+
+        function handleLogoChange(e) {
+          const file = e.target.files[0];
+          if (file) {
+            setLogoPreview(URL.createObjectURL(file));
+            setLogoFile(file);
+          }
+        }
+
+        function handleSaveClick() {
+          const updated = {
+            storeName,
+            storeDescription: description,
+            pickupInstructions,
+            logoUrl: logoFile ? logoPreview : seller.logoUrl,
+          };
+          onSave(updated);
+          alert('Store settings updated!');
+        }
+
+        return (
+          <form style={{ maxWidth: '600px', marginTop: '1rem' }} onSubmit={e => { e.preventDefault(); handleSaveClick(); }} aria-label="Store Settings Form">
+            <label htmlFor="storeName">Store Name</label>
+            <input id="storeName" type="text" value={storeName} onChange={e => setStoreName(e.target.value)} tabIndex={0} required />
+            <label htmlFor="storeDescription">Store Description</label>
+            <textarea id="storeDescription" rows="3" value={description} onChange={e => setDescription(e.target.value)} tabIndex={0} />
+            <label htmlFor="pickupInstructions">Custom Pickup Instructions</label>
+            <textarea id="pickupInstructions" rows="2" value={pickupInstructions} onChange={e => setPickupInstructions(e.target.value)} tabIndex={0} />
+            <label htmlFor="logoFile">Store Logo</label>
+            <input id="logoFile" type="file" accept="image/*" onChange={handleLogoChange} tabIndex={0} />
+            {logoPreview && <img src={logoPreview} alt="Store logo preview" style={{ width: '120px', marginTop: '0.7rem', borderRadius: '14px' }} />}
+            <button type="submit" style={{ marginTop: '1.5rem' }} aria-label="Save Store Settings">Save</button>
+          </form>
+        );
+      }
+
+      // Delivery Settings Form for seller to configure delivery partners and fees
+      function DeliverySettingsForm({ seller, addPartner, removePartner }) {
+        const [newPartnerName, setNewPartnerName] = useState('');
+        const [newPartnerFees, setNewPartnerFees] = useState(''); // JSON input: {"City1": 50, "City2": 60}
+
+        function handleAddPartner() {
+          if (!newPartnerName.trim()) {
+            alert('Enter a partner name');
+            return;
+          }
+          let feesObj = {};
+          try {
+            feesObj = JSON.parse(newPartnerFees);
+          } catch {
+            alert('Delivery fee by area must be a valid JSON object, e.g. {"City A": 50, "City B": 60}');
+            return;
+          }
+          addPartner({ name: newPartnerName.trim(), feeByArea: feesObj });
+          setNewPartnerName('');
+          setNewPartnerFees('');
+        }
+
+        return (
+          <>
+            <h3>Delivery Partners</h3>
+            {seller.deliveryPartners && seller.deliveryPartners.length > 0 ? (
+              <table aria-label="Delivery Partners List">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Fee by Area (JSON)</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {seller.deliveryPartners.map(p => (
+                    <tr key={p.name}>
+                      <td>{p.name}</td>
+                      <td><pre>{JSON.stringify(p.feeByArea, null, 2)}</pre></td>
+                      <td><button onClick={() => removePartner(p.name)} className="danger-btn">Remove</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No delivery partners added yet.</p>
+            )}
+            <div style={{ marginTop: '1rem', marginBottom: '3rem', borderTop: '1px solid #ccc', paddingTop: '1rem' }}>
+              <h4>Add New Partner</h4>
+              <label htmlFor="partnerName">Name:</label>
+              <input id="partnerName" type="text" value={newPartnerName} onChange={e => setNewPartnerName(e.target.value)} tabIndex={0} />
+              <label htmlFor="partnerFees">Delivery Fee by Area (JSON):</label>
+              <textarea id="partnerFees" rows="3" value={newPartnerFees} onChange={e => setNewPartnerFees(e.target.value)} placeholder='e.g. {"City of Manila": 50, "Quezon City": 70}' tabIndex={0} />
+              <button onClick={handleAddPartner} style={{ marginTop: '0.8rem' }}>Add Partner</button>
+            </div>
+          </>
+        );
+      }
+
+      // Seller Tools: reports, order receipt printing, CSV export
+      function SellerTools({ seller, generateReport }) {
+        // sales report mock, etc
+        return (
+          <>
+            <h3>Sales Report</h3>
+            <p>You can generate a sales report CSV below:</p>
+            <button onClick={generateReport} aria-label="Generate sales report CSV">Download CSV</button>
+            <h3 style={{ marginTop: '3rem' }}>Order Receipt Printing</h3>
+            <p>This feature will be available in future versions.</p>
+          </>
+        );
+      }
+
+      // Shopping Cart Page with bundle support
+      function CartPage() {
+        const { cart, updateQuantity, removeFromCart, clearCart } = useContext(CartContext);
+        const navigate = useNavigate();
+
+        // For bundles, demo simplification: consider cart items individually
+        const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        function proceedToCheckout() {
+          if(cart.length === 0){
+            alert('Your cart is empty');
+            return;
+          }
+          navigate('/checkout');
+        }
+        return (
+          <main className="container" aria-label="Shopping cart page">
+            <h2>Shopping Cart</h2>
+            {cart.length === 0 ? (
+              <>
+                <p>Your cart is empty. <Link to="/browse">Browse products</Link></p>
+              </>
+            ) : (
+              <>
+                <table aria-label="Shopping cart items" style={{userSelect:'none'}}>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Image</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Subtotal</th>
+                      <th>Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cart.map(item => (
+                      <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td><img src={item.images[0]} alt={item.name} style={{ width: '50px', height: '40px', objectFit: 'cover', borderRadius: '6px' }} /></td>
+                        <td>
+                          <input
+                            type="number"
+                            min="1"
+                            max={item.stock}
+                            value={item.quantity}
+                            onChange={e => {
+                              let val = parseInt(e.target.value);
+                              if (isNaN(val) || val < 1) val = 1;
+                              if(val > item.stock) val = item.stock;
+                              updateQuantity(item.id, val);
+                            }}
+                            aria-label={`Quantity for ${item.name}`}
+                            style={{ width: '60px' }}
+                          />
+                        </td>
+                        <td>₱ {item.price.toFixed(2)}</td>
+                        <td>₱ {(item.price * item.quantity).toFixed(2)}</td>
+                        <td>
+                          <button onClick={() => removeFromCart(item.id)} className="danger-btn" aria-label={`Remove ${item.name} from cart`}>Remove</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p style={{ marginTop: '1rem', fontWeight: '700', fontSize: '1.2rem' }}>Total Amount: ₱ {totalAmount.toFixed(2)}</p>
+                <div>
+                  <button onClick={proceedToCheckout} aria-label="Proceed to checkout" style={{ marginRight: '1rem' }}>Proceed to Checkout</button>
+                  <button onClick={clearCart} className="danger-btn" aria-label="Clear shopping cart">Clear Cart</button>
+                </div>
+              </>
+            )}
+          </main>
+        );
+      }
+
+      // Checkout page with expanded delivery and pickup options and POS simulation
+      function Checkout() {
+        const navigate = useNavigate();
+        const auth = useContext(AuthContext);
+        const { cart, clearCart } = useContext(CartContext);
+
+        const [billingName, setBillingName] = useState(auth.user?.name || '');
+        const [billingEmail, setBillingEmail] = useState(auth.user?.email || '');
+        const [shippingRegion, setShippingRegion] = useState('');
+        const [shippingBarangay, setShippingBarangay] = useState('');
+        const [paymentMethod, setPaymentMethod] = useState('');
+        const [orderSuccess, setOrderSuccess] = useState(false);
+        const [orderId, setOrderId] = useState('');
+
+        // Calculate delivery fee based on shippingRegion and delivery options
+        // For demo, simplified with fixed delivery fee 50 if courier selected
+        const deliveryFee = paymentMethod === 'delivery' ? 50 : 0;
+
+        // Total amount including delivery fee
+        const subtotal = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
+        const total = subtotal + deliveryFee;
+
+        function confirmOrder(e) {
+          e.preventDefault();
+          if (!billingName || !billingEmail) {
+            alert('Please enter your billing information');
+            return;
+          }
+          if (!paymentMethod) {
+            alert('Please select a payment option');
+            return;
+          }
+          if (paymentMethod === 'delivery' && (!shippingRegion || !shippingBarangay)) {
+            alert('Please specify shipping region and barangay');
+            return;
+          }
+          // For demo, just clear cart and show success message
+          clearCart();
+          setOrderId('ORD-' + (Math.floor(Math.random()*900000)+100000));
+          setOrderSuccess(true);
+        }
+
+        if(orderSuccess){
+          return (
+            <main className="container" aria-label="Order success page">
+              <h2>Order Confirmation</h2>
+              <p>Thank you, <strong>{billingName}</strong>! Your order <strong>{orderId}</strong> has been placed.</p>
+              <p>You will receive confirmation and updates via email: <em>{billingEmail}</em>.</p>
+              <button onClick={() => navigate('/')}>Return to Home</button>
+            </main>
+          );
+        }
+
+        return (
+          <main className="container" aria-label="Checkout page">
+            <h2>Checkout</h2>
+            {cart.length === 0 ? (
+              <p>Your cart is empty. <Link to="/browse">Browse products</Link></p>
+            ) : (
+              <form onSubmit={confirmOrder} aria-label="Checkout form" noValidate>
+                <fieldset>
+                  <legend>Billing Information</legend>
+                  <label htmlFor="billingName">Full Name</label>
+                  <input id="billingName" name="billingName" type="text" value={billingName} onChange={e => setBillingName(e.target.value)} required tabIndex={0} />
+
+                  <label htmlFor="billingEmail">Email</label>
+                  <input id="billingEmail" name="billingEmail" type="email" value={billingEmail} onChange={e => setBillingEmail(e.target.value)} required tabIndex={0} />
+                </fieldset>
+
+                <fieldset>
+                  <legend>Shipping Address</legend>
+                  <label htmlFor="shippingRegion">Region/City</label>
+                  <input id="shippingRegion" name="shippingRegion" type="text" value={shippingRegion} onChange={e => setShippingRegion(e.target.value)} tabIndex={0} />
+
+                  <label htmlFor="shippingBarangay">Barangay</label>
+                  <input id="shippingBarangay" name="shippingBarangay" type="text" value={shippingBarangay} onChange={e => setShippingBarangay(e.target.value)} tabIndex={0} />
+                </fieldset>
+
+                <fieldset>
+                  <legend>Payment Options</legend>
+                  <label><input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={e => setPaymentMethod(e.target.value)} required tabIndex={0} /> Cash on Delivery</label><br/>
+                  <label><input type="radio" name="payment" value="delivery" checked={paymentMethod === 'delivery'} onChange={e => setPaymentMethod(e.target.value)} tabIndex={0} /> GCash / PayMaya (Mock)</label>
+                </fieldset>
+
+                <p style={{fontWeight: '700', marginTop: '1rem'}}>Order Summary</p>
+                <ul>
+                  {cart.map(p => (
+                    <li key={p.id}>{p.quantity} x {p.name} - ₱ {(p.price * p.quantity).toFixed(2)}</li>
+                  ))}
+                </ul>
+                <p>Subtotal: ₱ {subtotal.toFixed(2)}</p>
+                <p>Delivery Fee: ₱ {deliveryFee.toFixed(2)}</p>
+                <p style={{ fontWeight: '700' }}>Total Amount: ₱ {total.toFixed(2)}</p>
+
+                <button type="submit" aria-label="Confirm order">Confirm Order</button>
+              </form>
+            )}
+          </main>
+        );
+      }
+
+      // Login page (simplified)
+      function Login() {
+        const auth = useContext(AuthContext);
+        const navigate = useNavigate();
+
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+        const [error, setError] = useState('');
+
+        function handleLogin(e) {
+          e.preventDefault();
+          // Look up user in sellersDB for demo
+          const user = sellersDB.find(s => s.email === email);
+          if(!user || password !== user.password){
+            setError('Invalid email or password');
+            return;
+          }
+          auth.login(user);
+          navigate('/');
+        }
+
+        return (
+          <main className="container" aria-label="Login page">
+            <form onSubmit={handleLogin} style={{ maxWidth: '400px', margin: '3rem auto' }} noValidate>
+              <h2>Login</h2>
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+              <label htmlFor="loginEmail">Email</label>
+              <input id="loginEmail" type="email" value={email} onChange={e => setEmail(e.target.value)} required tabIndex={0} />
+              <label htmlFor="loginPassword">Password</label>
+              <input id="loginPassword" type="password" value={password} onChange={e => setPassword(e.target.value)} required tabIndex={0} />
+              <button type="submit">Login</button>
+            </form>
+          </main>
+        );
+      }
+
+      // Register page mirrors BecomeSeller for new user registration (can be buyer or seller as per spec)
+      function Register() {
+        const navigate = useNavigate();
+        return <BecomeSeller />;
+      }
+
+      // About page
+      function About() {
+        return (
+          <main className="container" aria-label="About Bayanihan Market">
+            <h2>About Us</h2>
+            <p>Bayanihan Market is a community-driven online marketplace connecting Filipino farmers, producers, and local vendors with customers nationwide. We empower local entrepreneurs and promote sustainable, fresh, and handmade products especially from barangays and nearby cities.</p>
+          </main>
+        );
+      }
+
+      // Help / Contact page
+      function Help() {
+        return (
+          <main className="container" aria-label="Help and Contact">
+            <h2>Help and Contact</h2>
+            <p>If you need assistance, please email us at <a href="mailto:support@bayanihanmarket.ph">support@bayanihanmarket.ph</a> or call <a href="tel:+63123456789">+63 123 456 789</a>.</p>
+          </main>
+        );
+      }
+
+      // NotFound page
+      function NotFound(){
+        const navigate = useNavigate();
+        return (
+          <main className="container" aria-label="Page not found">
+            <h2>404 - Page Not Found</h2>
+            <p>Sorry, the page you are looking for does not exist.</p>
+            <button onClick={() => navigate('/')}>Go Home</button>
+          </main>
+        );
+      }
+
+      // Main app routing and layout
+      function App() {
+        return (
+          <AuthProvider>
+            <CartProvider>
+              <BrowserRouter>
+                <Header />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/browse" element={<Browse />} />
+                  <Route path="/product/:sellerId/:productId" element={<ProductDetail />} />
+                  <Route path="/store/:sellerId" element={<StorePage />} />
+                  <Route path="/become-seller" element={<BecomeSeller />} />
+                  <Route path="/seller-dashboard" element={<RequireAuth><SellerDashboard /></RequireAuth>} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/help" element={<Help />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </CartProvider>
+          </AuthProvider>
+        );
+      }
+
+      // RequireAuth component for protected routes
+      function RequireAuth({ children }) {
+        const auth = useContext(AuthContext);
+        const navigate = useNavigate();
+
+        useEffect(() => {
+          if (!auth.user) {
+            navigate('/login');
+          }
+        }, [auth, navigate]);
+
+        return auth.user ? children : null;
+      }
+
+      // Render the app
+      createRoot(document.querySelector('[data-root]')).render(React.createElement(App));
+    })();
+  </script>
+</body>
+</html>
+
